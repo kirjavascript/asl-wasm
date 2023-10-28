@@ -8,6 +8,10 @@
 /*                                                                           */
 /*****************************************************************************/
 
+#ifdef __wasm__
+#include <emscripten.h>
+#endif
+
 #include "stdinc.h"
 #include <string.h>
 #include <ctype.h>
@@ -4692,6 +4696,8 @@ int main(int argc, char **argv)
     CloseIfOpen(&ErrorFile);
 
   ClearCPUList();
+
+  printf("__flex2__done__\n");
 
   return GlobErrFlag ? 2 : 0;
 }

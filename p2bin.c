@@ -62,7 +62,7 @@ static void ChkIO_L(char *s, int line)
   if (errno != 0)
   {
     fprintf(stderr, "%s %d\n", s, line);
-    exit(3);
+    _exit(3);
   }
 }
 #endif
@@ -70,7 +70,7 @@ static void ChkIO_L(char *s, int line)
 static void ParamError(Boolean InEnv, char *Arg)
 {
   fprintf(stderr, "%s%s\n%s\n", getmessage((InEnv)?Num_ErrMsgInvEnvParam:Num_ErrMsgInvParam), Arg, getmessage(Num_ErrMsgProgTerm));
-  exit(1);
+  _exit(1);
 }
 
 #define BufferSize 4096
@@ -483,7 +483,7 @@ static CMDResult CMD_StartHeader(Boolean Negate, const char *Arg)
     StartHeader *= Sgn;
     return CMDArg;
   }
-}	
+}
 
 static CMDResult CMD_EntryAdr(Boolean Negate, const char *Arg)
 {
@@ -559,7 +559,7 @@ static CMDRec P2BINParams[] =
   { "SEGMENT"  , CMD_ForceSegment },
 };
 
-int main(int argc, char **argv)	
+int main(int argc, char **argv)
 {
   int z;
   char *ph1, *ph2;
@@ -567,7 +567,7 @@ int main(int argc, char **argv)
 
   nls_init();
   if (!NLS_Initialize(&argc, argv))
-    exit(4);
+    _exit(4);
 
   endian_init();
   strutil_init();
@@ -591,7 +591,7 @@ int main(int argc, char **argv)
       printf("%s\n", ph1);
       *ph2 = '\n';
     }
-    exit(1);
+    _exit(1);
   }
 
   StartAdr = 0;
@@ -620,7 +620,7 @@ int main(int argc, char **argv)
     errno = 0;
     fprintf(stderr, "%s\n", getmessage(Num_ErrMsgTargMissing));
     ChkIO(OutName);
-    exit(1);
+    _exit(1);
   }
 
   z = argc - 1;
@@ -655,7 +655,7 @@ int main(int argc, char **argv)
       errno = 0;
       fprintf(stderr, "%s\n", getmessage(Num_ErrMsgAutoFailed));
       ChkIO(OutName);
-      exit(1);
+      _exit(1);
     }
     if (!QuietMode)
     {
@@ -685,5 +685,12 @@ int main(int argc, char **argv)
           ProcessGroup(argv[z], EraseFile);
   }
 
+  printf("__flex2__done__\n");
+
   return 0;
+}
+
+void _exit(int status) {
+    printf("__flex2__done__\n");
+    exit(status);
 }
